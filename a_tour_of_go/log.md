@@ -128,6 +128,46 @@ const world = "World"
 
 [Go's Declaration Syntax](https://go.dev/blog/declaration-syntax)
 
+### Flow control
+
+**for loop**
+
+```go
+// basic for loop
+sum := 0
+for i:=0; i < 10; i++{
+    sum += i
+}
+
+// "while"
+sum := 1
+for sum < 1000{
+    sum += sum
+}
+
+// endless
+for{
+}
+```
+
+**if**
+
+```go
+// basic: no parentheses
+if x < 0{
+    // ...
+}
+
+// if with statements
+if v:=math.Pow(x, n); v<lim{
+    // ...
+} else{
+    
+}
+```
+
+
+
 ## Methods and interfaces
 
 ## Concurrency
