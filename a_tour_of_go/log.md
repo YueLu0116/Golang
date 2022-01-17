@@ -166,7 +166,73 @@ if v:=math.Pow(x, n); v<lim{
 }
 ```
 
+**exercise: loops and functions**
 
+```go
+package main
+import (
+	"fmt"
+	"math"
+)
+func Sqrt(x float64) float64 {
+    z := 1.0
+	for math.Abs((z*z-x)/(2*z)) > float64(10e-6){
+	    z -= (z*z-x)/(2*z)
+		fmt.Println(z)
+	}
+	return z
+}
+func main() {
+	fmt.Println(Sqrt(2))
+}
+```
+
+**switch**
+
+```go
+// no need for breaks, constants...
+switch os:=runtime.GOOS; os{
+  case "darwin":
+      // ...
+  case "linux":
+      // ...
+  default:
+      // ...
+}
+
+// switch true => long if-else chain
+switch{
+  case x < 10:
+      // ...
+  case x = 11:
+      // ...
+  default:
+      // ...
+}
+```
+
+**defer**
+
+> A defer statement defers the execution of a function until the surrounding function returns.
+>
+> The deferred call's **arguments are evaluated immediately**, but the function call is not executed until the surrounding function returns.
+
+```go
+// can be stacked
+package main
+import "fmt"
+func main() {
+	fmt.Println("counting")
+	for i := 0; i < 10; i++ {
+		defer fmt.Println(i)
+	}
+	fmt.Println("done")
+}
+```
+
+**Reference**
+
+[Defer, Panic, and Recover](https://go.dev/blog/defer-panic-and-recover)
 
 ## Methods and interfaces
 
