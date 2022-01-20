@@ -166,69 +166,6 @@ if v:=math.Pow(x, n); v<lim{
 }
 ```
 
-**exercise: loops and functions**
-```go
-package main
-import (
-	"fmt"
-	"math"
-)
-func Sqrt(x float64) float64 {
-    z := 1.0
-	for math.Abs((z*z-x)/(2*z)) > float64(10e-6){
-	    z -= (z*z-x)/(2*z)
-		fmt.Println(z)
-	}
-	return z
-}
-func main() {
-	fmt.Println(Sqrt(2))
-}
-```
-
-### More types
-
-**pointers**
-
-has no pointer arithmetic and others are like pointers in C
-
-**structs**
-
-```go
-// basic struct
-type Vertex struct{
-    X int
-    Y int
-}
-
-// initialize and access
-func main(){
-    v:=Vertex{1,2}
-    v.X  =4;
-    // ...
-    p := &v
-    p.Y = 0 // no need to use (*P).Y
-    
-    // more ways to initialize
-    v2 = Vertex{X: 1}  // Y=0
-    v3 = Vertex{}
-}
-```
-
-**arrays**
-
-```go
-// initialize
-var a [10]int
-a[0] = 1
-a[1] = 2
-var primes := [6]int{1,2,3,4,5,6}
-
-// slice an array
-// []T
-var s[]int = primes[1:4] // 2,3,4
-```
-
 **switch**
 
 ```go
@@ -272,9 +209,148 @@ func main() {
 }
 ```
 
+**exercise: loops and functions**
+```go
+package main
+import (
+	"fmt"
+	"math"
+)
+func Sqrt(x float64) float64 {
+    z := 1.0
+	  for math.Abs((z*z-x)/(2*z)) > float64(10e-6){
+	      z -= (z*z-x)/(2*z)
+		    fmt.Println(z)
+	  }
+	  return z
+}
+func main() {
+	  fmt.Println(Sqrt(2))
+}
+```
+
+### More types
+
+**pointers**
+
+has no pointer arithmetic and others are like pointers in C
+
+**structs**
+
+```go
+// basic struct
+type Vertex struct{
+    X int
+    Y int
+}
+
+// initialize and access
+func main(){
+    v:=Vertex{1,2}
+    v.X  =4;
+    // ...
+    p := &v
+    p.Y = 0 // no need to use (*P).Y
+    
+    // more ways to initialize
+    v2 = Vertex{X: 1}  // Y=0
+    v3 = Vertex{}
+}
+```
+
+**arrays**
+
+```go
+// initialize
+var a [10]int
+a[0] = 1
+a[1] = 2
+primes := [6]int{1,2,3,4,5,6}
+```
+
+**slices**
+
+```go
+// slice an array
+// []T
+var s[]int = primes[1:4] // 2,3,4
+```
+
+A slice is a reference of a part of array.
+
+```go
+// default slices
+var a [10]int
+// equivalents
+a[0:10]
+a[:10]
+a[0:]
+a[:]
+```
+
+Slice has capacity and size (like c++'s vector)
+
+```go
+func main() {
+	s := []int{2, 3, 5, 7, 11, 13}
+	printSlice(s)
+	// Slice the slice to give it zero length.
+	s = s[:0]
+	printSlice(s)
+	// Extend its length.
+	s = s[:4]
+	printSlice(s)
+	// Drop its first two values.
+	s = s[2:]
+	printSlice(s)
+}
+```
+
+use make to dynamicly create a slice
+
+```go
+a := make([]int, 5)  // len(a)=5
+b := make([]int, 0, 5) // len(b)=0, cap(b)=5
+```
+
+**range**
+
+range loop:
+
+```go
+var pow = []int{1, 2, 4, 8, 16, 32, 64, 128}
+
+func main() {
+	for i, v := range pow {
+		fmt.Printf("2**%d = %d\n", i, v)
+	}
+}
+
+// more simple ways
+// for i, _ := range pow
+// for _, value := range pow
+```
+
+**exercises: slices**
+
+```go
+func Pic(dx, dy int) [][]uint8 {
+   image := make([][]uint8, dy)
+	for i:=0;i<dy;i++{
+	    image[i] = make([]uint8, dx)
+	    for j:=0;j<dx;j++{
+		    image[i][j] = uint8(i^j)
+		}
+	}
+	return image
+}
+```
+
 **Reference**
 
 [Defer, Panic, and Recover](https://go.dev/blog/defer-panic-and-recover)
+
+[Go Slices: usage and internals](https://go.dev/blog/slices-intro)
 
 ## Methods and interfaces
 
