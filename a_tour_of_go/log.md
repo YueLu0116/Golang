@@ -167,7 +167,6 @@ if v:=math.Pow(x, n); v<lim{
 ```
 
 **exercise: loops and functions**
-
 ```go
 package main
 import (
@@ -185,6 +184,49 @@ func Sqrt(x float64) float64 {
 func main() {
 	fmt.Println(Sqrt(2))
 }
+```
+
+### More types
+
+**pointers**
+
+has no pointer arithmetic and others are like pointers in C
+
+**structs**
+
+```go
+// basic struct
+type Vertex struct{
+    X int
+    Y int
+}
+
+// initialize and access
+func main(){
+    v:=Vertex{1,2}
+    v.X  =4;
+    // ...
+    p := &v
+    p.Y = 0 // no need to use (*P).Y
+    
+    // more ways to initialize
+    v2 = Vertex{X: 1}  // Y=0
+    v3 = Vertex{}
+}
+```
+
+**arrays**
+
+```go
+// initialize
+var a [10]int
+a[0] = 1
+a[1] = 2
+var primes := [6]int{1,2,3,4,5,6}
+
+// slice an array
+// []T
+var s[]int = primes[1:4] // 2,3,4
 ```
 
 **switch**
