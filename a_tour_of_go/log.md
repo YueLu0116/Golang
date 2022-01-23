@@ -594,8 +594,16 @@ func do(i interface{}) {
 }
 ```
 
+**exercise: Stringers**
 
+```go
+func (ip IPAddr) String() string {
+	return fmt.Sprintf("%d.%d.%d.%d", ip[0], ip[1], ip[2], ip[3])
+}
+```
 
+**other common interfaces**
 
+Error, Reader, and Image (skip)
 
 ## Concurrency
