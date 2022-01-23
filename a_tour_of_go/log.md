@@ -346,6 +346,106 @@ func Pic(dx, dy int) [][]uint8 {
 }
 ```
 
+**map**
+
+```go
+// basic usages
+var m map[string]Vertex
+
+func main(){
+    m = make(map[string]Vertex)
+    m["hh"] = Vertex{1.0,1.0}
+}
+
+// literals
+var m = map[string]Vertex{
+    "Bell Labs": {40.68433, -74.39967},
+    "Google":    {37.42202, -122.08408},
+}
+
+// detect if a key exists
+elem, ok := m[key]
+```
+
+**exercises: map**
+
+```go
+func WordCount(s string) map[string]int {
+    var m map[string]int
+    m = make(map[string]int)
+    for _, w := range strings.Fields(s){
+        m[w] += 1
+    }
+    return m
+}
+```
+
+**function values**
+
+```go
+// basics: can be used as function arguements and return values
+func compute(fn func(float64, float64) float64) float64 {
+    return fn(3, 4)
+}
+func main() {
+    hypot := func(x, y float64) float64 {
+        return math.Sqrt(x*x + y*y)
+    }
+    fmt.Println(hypot(5, 12))
+}
+
+// closures: capture variables from outside func's body
+// adder() return a closure
+func adder() func(int) int {
+    sum := 0
+    return func(x int) int {
+        sum += x
+        return sum
+    }
+}
+func main() {
+    pos, neg := adder(), adder()
+    for i := 0; i < 10; i++ {
+        fmt.Println(
+            pos(i),
+            neg(-2*i),
+        )
+    }
+}
+
+```
+
+**exercises: fibonacci closure**
+
+```go
+package main
+
+import "fmt"
+
+// fibonacci is a function that returns
+// a function that returns an int.
+func fibonacci() func() int {
+    id := 0
+    return func() int{
+        var ret int
+        if id==0 || id == 1{
+          ret = id
+        } else{
+          ret = (id-1) + (id-2)
+        }
+        id += 1
+        return ret
+    }
+}
+
+func main() {
+    f := fibonacci()
+    for i := 0; i < 10; i++ {
+        fmt.Println(f())
+    }
+}
+```
+
 **Reference**
 
 [Defer, Panic, and Recover](https://go.dev/blog/defer-panic-and-recover)
