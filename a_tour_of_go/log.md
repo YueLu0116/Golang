@@ -607,3 +607,101 @@ func (ip IPAddr) String() string {
 Error, Reader, and Image (skip)
 
 ## Concurrency
+
+**goroutines**
+
+use `go` keyword
+
+```go
+func say(s string) {
+	// ...
+}
+
+func main() {
+	go say("world")
+	say("hello")
+}
+```
+
+**channels**
+
+use `<-` channel operator
+
+```go
+ch <- v    // Send v to channel ch.
+v := <-ch  // Receive from ch, and
+           // assign value to v.
+// must be initialized using make
+ch := make(chan int)
+```
+
+**buffered channels**
+
+```go
+ch := make(chan int, 100)
+// when the buffer is full, sending to it will be blocked
+// when the buffer is empty, receiving from it will be blocked
+```
+
+**close a channel**
+
+1. Only the sender can close the channel to tell receivers there are no data to be sent
+2. use `for i:=range c` to receive data from a channel until it is closed
+3. Simple test: `v,ok := <-ch`
+
+example:
+
+```go
+func fibonacci(n int, c chan int) {
+	x, y := 0, 1
+	for i := 0; i < n; i++ {
+		c <- x
+		x, y = y, x+y
+	}
+	close(c)
+}
+func main() {
+	c := make(chan int, 10)
+	go fibonacci(cap(c), c)
+	for i := range c {
+		fmt.Println(i)
+	}
+}
+```
+
+**select**
+
+waiting for multiple `cases` until as least one can be run. Randomly select one case and execute it. example:
+
+```go
+func fibonacci(c, quit chan int) {
+	x, y := 0, 1
+	for {
+		select {
+		case c <- x:
+			x, y = y, x+y
+		case <-quit:
+			fmt.Println("quit")
+			return
+		}
+	}
+}
+
+func main() {
+	c := make(chan int)
+	quit := make(chan int)
+	go func() {
+		for i := 0; i < 10; i++ {
+			fmt.Println(<-c)
+		}
+		quit <- 0
+	}()
+	fibonacci(c, quit)
+}
+
+// default selection: is run if no other cases matched
+```
+
+**mutex**
+
+[`sync.Mutex`](https://golang.org/pkg/sync/#Mutex)
