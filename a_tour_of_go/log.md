@@ -354,4 +354,148 @@ func Pic(dx, dy int) [][]uint8 {
 
 ## Methods and interfaces
 
+**methods**: functions with a specific receiver of on a type
+
+```go
+// methods for structs
+type Vertex struct {
+	X, Y float64
+}
+func (v Vertex) Abs() float64 {
+	return math.Sqrt(v.X*v.X + v.Y*v.Y)
+}
+
+// methods on other user defined types
+type MyFloat float64
+func (f MyFloat) Abs() float64 {
+	if f < 0 {
+		return float64(-f)
+	}
+	return float64(f)
+}
+```
+
+We cannot define methods on types in other packages (int, for example)
+
+**pointer receivers**: can modify the value to which the receiver points (more common)
+
+ ```go
+ type Vertex struct {
+ 	X, Y float64
+ }
+ func (v *Vertex) Scale(f float64) {
+ 	v.X = v.X * f
+ 	v.Y = v.Y * f
+ }
+ 
+ // methods with pointer receivers take either a value or a pointer as the receiver when they are called
+ type Vertex struct {
+ 	X, Y float64
+ }
+ func (v *Vertex) Scale(f float64) {
+ 	v.X = v.X * f
+ 	v.Y = v.Y * f
+ }
+ func main() {
+ 	v := Vertex{3, 4}
+ 	v.Scale(2)
+ 	p := &Vertex{4, 3}
+ 	p.Scale(3)
+ }
+ 
+ // methods with value receivers take either a value or a pointer as the receiver when they are called
+ type Vertex struct {
+ 	X, Y float64
+ }
+ func (v Vertex) Abs() float64 {
+ 	return math.Sqrt(v.X*v.X + v.Y*v.Y)
+ }
+ func main() {
+ 	v := Vertex{3, 4}
+ 	fmt.Println(v.Abs())
+ 	p := &Vertex{4, 3}
+ 	fmt.Println(p.Abs())
+ }
+ ```
+
+**interface**
+
+```go
+// basic struct
+type Abser interface{
+    Abs() float64
+}
+type Vertex struct {
+	X, Y float64
+}
+func (v *Vertex) Abs() float64 {  // type Vertex implements interface Abser
+	return math.Sqrt(v.X*v.X + v.Y*v.Y)
+}
+// Note: methods defined on value cannot be used for interface pointers
+func main(){
+    var a Abser
+    a = v
+    fmt.Println(a.Abs())  // wrong
+}
+// receivers can be nil
+type I interface {
+	M()
+}
+type T struct {
+	S string
+}
+func (t *T) M() {
+	if t == nil {
+		fmt.Println("<nil>")
+		return
+	}
+	fmt.Println(t.S)
+}
+func main() {
+	var i I
+	var t *T  // nil
+	i = t
+	describe(i)
+	i.M()
+}
+// But interface itself cannot be nil
+
+// Empty interface: without any method. Like void* in C, empty interface can hold any type
+```
+
+**type assertions**
+
+interface-> (value, type)
+
+use type assertion to access the underlying concrete value
+
+```go
+// t, ok := i.(T)
+func main() {
+	var i interface{} = "hello"
+	s, ok := i.(string)
+	fmt.Println(s, ok)
+	f, ok := i.(float64)
+	fmt.Println(f, ok)
+	f = i.(float64) // panic
+	fmt.Println(f)
+}
+
+// type switches
+func do(i interface{}) {
+	switch v := i.(type) {
+	case int:
+		fmt.Printf("Twice %v is %v\n", v, v*2)
+	case string:
+		fmt.Printf("%q is %v bytes long\n", v, len(v))
+	default:
+		fmt.Printf("I don't know about type %T!\n", v)
+	}
+}
+```
+
+
+
+
+
 ## Concurrency
